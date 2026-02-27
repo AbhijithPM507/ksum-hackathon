@@ -1,0 +1,46 @@
+[
+    {
+        "complaint_id": "d138f5a9-79c5-444f-b974-63d1643e93eb",
+        "user_id": 7330082752,
+        "username": "unknown",
+        "timestamp": "2026-02-27T17:51:34.862537",
+        "source": "telegram",
+        "content": {
+            "text": "Hi I have a complaint test",
+            "media_type": "text",
+            "media_url": null
+        },
+        "ai_analysis": {
+            "category": null,
+            "severity": null,
+            "risk_score": null,
+            "summary": null
+        },
+        "status": "received",
+        "integrity": {
+            "hash": "378a965a649c0d7ee59ad9108c64e5e53e44c6bd18054893ebe1601c200df344"
+        }
+    },
+    {
+        "complaint_id": "728350d0-5c25-4d18-8275-1127c43cbc23",
+        "user_id": 7330082752,
+        "username": "unknown",
+        "timestamp": "2026-02-27T17:54:24.728761",
+        "source": "telegram",
+        "content": {
+            "text": "Pm",
+            "media_type": "text",
+            "media_url": null
+        },
+        "ai_analysis": {
+            "category": null,
+            "severity": null,
+            "risk_score": null,
+            "summary": null
+        },
+        "status": "received",
+        "integrity": {
+            "hash": "cbca94df170dec80bd5d40e035e70422ca70dac37adfe24782987f9b501f40e6"
+        }
+    }
+]
