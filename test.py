@@ -1,5 +1,12 @@
-from data_layer.vector_db.query import query_legal_context
+from data_layer.pii_redactor.redactor import redact_pii
 
-results = query_legal_context("Is demanding bribe illegal?")
+sample_text = """
+My name is Rajesh Kumar from Kollam.
+My phone number is 9876543210.
+My email is rajesh@gmail.com.
+Officer Ramesh demanded 5000 rupees.
+"""
 
-print(results)
+result = redact_pii(sample_text)
+
+print(result)
