@@ -10,7 +10,7 @@ from faster_whisper import WhisperModel
 @lru_cache(maxsize=1)
 def load_model():
     return WhisperModel(
-        model_size_or_path="medium",
+        model_size_or_path="large-v2",
         device="cpu",
         compute_type="int8"   # Faster on CPU
     )
@@ -20,31 +20,20 @@ def load_model():
 # Clean & Normalize Audio (Critical for Accuracy)
 # -----------------------------------------------------------
 def clean_audio(input_path: str) -> str:
-    """
-    Converts audio to 16kHz mono WAV format.
-    This significantly improves Malayalam transcription accuracy.
-    """
-
-    if not os.path.exists(input_path):
-        raise FileNotFoundError(f"Audio file not found: {input_path}")
-
     output_path = "temp_clean_audio.wav"
 
     command = [
         "ffmpeg",
-        "-y",                   # overwrite if exists
+        "-y",
         "-i", input_path,
-        "-ar", "16000",         # 16kHz sample rate
-        "-ac", "1",             # mono channel
+        "-vn",
+        "-acodec", "pcm_s16le",
+        "-ar", "16000",
+        "-ac", "1",
         output_path
     ]
 
-    subprocess.run(
-        command,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        check=True
-    )
+    subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
 
     return output_path
 
@@ -68,7 +57,6 @@ def transcribe_audio(file_path: str) -> str:
         # Step 2: Transcribe (force Malayalam base language)
         segments, info = model.transcribe(
             cleaned_file,
-            language="ml",   # Force Malayalam (important)
             beam_size=5      # Improves decoding accuracy
         )
 
