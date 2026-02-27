@@ -26,6 +26,8 @@ Thumbs.db
 # Logs
 *.log
 
+*.ogg
+
 # Python cache
 .cache/
 

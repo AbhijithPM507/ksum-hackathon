@@ -1,50 +1,87 @@
 import os
-import tempfile
-from dotenv import load_dotenv
-from elevenlabs.client import ElevenLabs
-
-load_dotenv()
-
-SCRIBE_MODEL = "scribe_v2"
+import subprocess
+from functools import lru_cache
+from faster_whisper import WhisperModel
 
 
+# -----------------------------------------------------------
+# Load Whisper Model Once (Medium = best balance for Malayalam)
+# -----------------------------------------------------------
+@lru_cache(maxsize=1)
+def load_model():
+    return WhisperModel(
+        model_size_or_path="medium",
+        device="cpu",
+        compute_type="int8"   # Faster on CPU
+    )
+
+
+# -----------------------------------------------------------
+# Clean & Normalize Audio (Critical for Accuracy)
+# -----------------------------------------------------------
+def clean_audio(input_path: str) -> str:
+    """
+    Converts audio to 16kHz mono WAV format.
+    This significantly improves Malayalam transcription accuracy.
+    """
+
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"Audio file not found: {input_path}")
+
+    output_path = "temp_clean_audio.wav"
+
+    command = [
+        "ffmpeg",
+        "-y",                   # overwrite if exists
+        "-i", input_path,
+        "-ar", "16000",         # 16kHz sample rate
+        "-ac", "1",             # mono channel
+        output_path
+    ]
+
+    subprocess.run(
+        command,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=True
+    )
+
+    return output_path
+
+
+# -----------------------------------------------------------
+# Main Transcription Function
+# -----------------------------------------------------------
 def transcribe_audio(file_path: str) -> str:
     """
-    Transcribe audio file using ElevenLabs Scribe (SDK).
-    Returns speaker-labeled transcript.
+    Stable Malayalam + Mixed English transcription.
+    Offline.
+    No API dependency.
     """
 
-    eleven_api_key = os.getenv("ELEVENLABS_API_KEY")
+    model = load_model()
 
-    if not eleven_api_key:
-        raise ValueError("ELEVENLABS_API_KEY not configured in .env")
+    # Step 1: Clean audio
+    cleaned_file = clean_audio(file_path)
 
-    el_client = ElevenLabs(api_key=eleven_api_key)
-
-    # ElevenLabs expects file object
-    with open(file_path, "rb") as audio_file:
-        response = el_client.speech_to_text.convert(
-            file=audio_file,
-            model_id=SCRIBE_MODEL,
-            tag_audio_events=True,
-            diarize=True
+    try:
+        # Step 2: Transcribe (force Malayalam base language)
+        segments, info = model.transcribe(
+            cleaned_file,
+            language="ml",   # Force Malayalam (important)
+            beam_size=5      # Improves decoding accuracy
         )
 
-    # Build speaker-labeled transcript
-    lines = []
-    current_speaker = None
-    current_line = ""
+        transcript_parts = []
 
-    for word in response.words:
-        if word.speaker_id != current_speaker:
-            if current_line:
-                lines.append(f"Speaker {current_speaker}: {current_line.strip()}")
-            current_speaker = word.speaker_id
-            current_line = word.text
-        else:
-            current_line += f" {word.text}"
+        for segment in segments:
+            transcript_parts.append(segment.text.strip())
 
-    if current_line:
-        lines.append(f"Speaker {current_speaker}: {current_line.strip()}")
+        transcript = " ".join(transcript_parts).strip()
 
-    return "\n".join(lines)
+    finally:
+        # Step 3: Cleanup temp file
+        if os.path.exists(cleaned_file):
+            os.remove(cleaned_file)
+
+    return transcript
