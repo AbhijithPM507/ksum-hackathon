@@ -35,3 +35,5 @@ Thumbs.db
 # Model cache (SentenceTransformers / HuggingFace)
 ~/.cache/
 .huggingface/
+
+/legal_docs
