@@ -1,9 +1,10 @@
-# Core API (if running inside FastAPI project)
+# Core API
 fastapi
 uvicorn
 
 # Pinecone Vector Database
 pinecone
+pinecone-client
 
 # Embedding Model
 sentence-transformers
@@ -18,6 +19,16 @@ python-dotenv
 # PII Redaction (NER)
 spacy
 
+# LangGraph and LLM
+langgraph
+langchain
+langchain-community
+openai
+
+# Request Handling & Data Parsing
+requests
+pydantic
+python-multipart
+
 # Optional but useful
 numpy
-requests
