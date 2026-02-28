@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Python cache
+.cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model cache (SentenceTransformers / HuggingFace)
+~/.cache/
+.huggingface/
+
+/legal_docs
