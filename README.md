@@ -11,11 +11,27 @@
 ## 🏗️ Architecture
 The system follows a highly modular, decoupled microservices-inspired architecture:
 
-1. **Interface Layer (Telegram Bot):** Enables multi-modal inputs, handled by a FastAPI backend logic.
-2. **Preprocessing Layer:** Converts user media via OCR, Audio Transcription, and PDF parsing into normalized text.
-3. **Data Layer (Security & RAG):** Automatically scrubs Personal Identifiable Information (PII) via NLP, guarantees data immutability with localized block-hashing, and leverages Vector DBs for contextual legal intelligence.
-4. **Backend AI Logic (LangGraph):** Employs state-driven Agentic workflows for intelligent complaint analysis, driven by a local LLaMA 3 model.
-5. **Dashboard Layer (Streamlit):** Provides authorities with real-time KPI monitoring, severity mapping, and actionable analytics.
+```mermaid
+graph TD
+    A[Telegram Bot<br/>Interface Layer] -->|Multi-modal Inputs<br/>Text, Voice, Image, PDF| B(FastAPI Backend)
+    B --> C{Preprocessing Layer}
+    C -->|Images| D[OCR Extraction]
+    C -->|PDFs| E[PDF Parsing]
+    C -->|Voice| F[Audio Transcription]
+    D & E & F -.-> G[Normalized Text]
+    G --> H[Data Layer]
+    H --> I[PII Redactor<br/>spaCy NLP]
+    I --> J[Blockchain Integrity<br/>Tamper-proofing]
+    J --> K[(Pinecone Vector DB<br/>Legal Context Retrieval)]
+    K --> L[LangGraph AI Logic]
+    L --> M[Categorization Node]
+    L --> N[Risk Analysis Node]
+    L --> O[Escalation Node]
+    M & N & O --> P[LLaMA 3 Model]
+    P --> Q[Processed Complaint]
+    Q --> R[Streamlit Dashboard<br/>KPIs & Analytics]
+    Q -.->|High Risk| S[Telegram Admin Alert]
+```
 
 ## 🧩 Modules
 - **Telegram Interface (`interface_layer/app.py`):** FastAPI + `python-telegram-bot` webhook-driven ingestion point.
