@@ -1,0 +1,41 @@
+# Core API
+fastapi
+uvicorn
+
+# Telegram Bot Integration
+python-telegram-bot
+
+# Monitoring Dashboard
+streamlit
+pandas
+plotly
+
+# Agentic AI & Graph Logic
+langgraph
+
+# Media Processing & OCR
+PyPDF2
+pypdf
+pdf2image
+opencv-python
+easyocr
+pytesseract
+Pillow
+faster-whisper
+
+# Vector Database
+pinecone-client
+
+# Embedding Models
+sentence-transformers
+torch
+
+# PII Redaction (NLP)
+spacy
+
+# Environment Variables
+python-dotenv
+
+# Utilities
+numpy
+requests

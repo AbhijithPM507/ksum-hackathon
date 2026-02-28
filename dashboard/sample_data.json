@@ -1,0 +1,28 @@
+[
+  {
+    "id": "C001",
+    "district": "Thiruvananthapuram",
+    "lat": 8.5241,
+    "lon": 76.9366,
+    "category": "Bribery",
+    "department": "Revenue",
+    "severity": "High",
+    "risk_score": 8.7,
+    "status": "Pending",
+    "timestamp": "2026-02-27 12:01",
+    "blockchain_hash": "abc123xyz"
+  },
+  {
+    "id": "C002",
+    "district": "Kochi",
+    "lat": 9.9312,
+    "lon": 76.2673,
+    "category": "Service Delay",
+    "department": "Motor Vehicles",
+    "severity": "Medium",
+    "risk_score": 6.2,
+    "status": "Resolved",
+    "timestamp": "2026-02-27 11:45",
+    "blockchain_hash": "xyz789abc"
+  }
+]
